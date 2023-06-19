@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Repository\Login\LoginInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -17,29 +17,17 @@ class LoginController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function register(Request $request)
+    private $login;
+    public function __construct(LoginInterface $login)
     {
-        $validator = FacadesValidator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string'
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'fails',
-                'message' => $validator->errors()->first(),
-                'errors' => $validator->errors()->toArray(),
-            ]);
+        $this->login = $login;
+    }
+    public function register(LoginRequest $request)
+    {
+        if ($this->login->login($request)) {
+            return response()->json(['status' => 201]);
         }
-        $user = new User([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-        $user->save();
-        return response()->json([
-            'status' => 'success',
-        ]);
+        return response()->json(['status' => 404]);
     }
     public function login(ServerRequestInterface $request)
     {
@@ -54,17 +42,13 @@ class LoginController extends Controller
                 'errors' => $validator->errors()->toArray(),
             ]);
         }
-
-        $requester = $request->withParsedBody([
-            'grant_type' => 'password',
-            'client_id' => '996c3a6b-0ea6-4790-be0e-0e6650bf84b9',
-            'client_secret' => 'RlgY7WxkYdr5aN1vJ9k6nGCUEsTfSt67p0oHNToy',
-            'username' => $request->getParsedBody()['email'],
-            'password' => $request->getParsedBody()['password'],
-            'scope' => '',
+        $data = $this->login->login($request);
+        if ($data) {
+            return response()->json($data);
+        }
+        return response()->json([
+            'status' => 'failed',
         ]);
-
-        return app()->make(\Laravel\Passport\Http\Controllers\AccessTokenController::class)->issueToken($requester);
     }
     public function info()
     {
