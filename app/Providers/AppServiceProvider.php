@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Repository\Login\LoginInterface;
 use App\Repository\Login\LoginRepository;
-use App\Repository\Role\RoleInterface;
+use App\Repository\Login\LoginRepositoryInterface;
 use App\Repository\Role\RoleRepository;
+use App\Repository\Role\RoleRepositoryInterface;
 use App\Repository\User\UserRepository;
-use App\Repository\User\UserInterface;
+use App\Repository\User\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
@@ -21,9 +21,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->app->bind(UserInterface::class, UserRepository::class);
-        $this->app->bind(RoleInterface::class, RoleRepository::class);
-        $this->app->bind(LoginInterface::class, LoginRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(RoleRepositoryInterface::class, RoleRepository::class);
+        $this->app->bind(LoginRepositoryInterface::class, LoginRepository::class);
     }
 
     /**

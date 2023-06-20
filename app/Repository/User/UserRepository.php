@@ -2,16 +2,20 @@
 
 namespace App\Repository\User;
 
-use App\Repository\User\UserInterface;
+use App\Repository\User\UserRepositoryInterface;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class UserRepository implements UserInterface
+class UserRepository implements UserRepositoryInterface
 {
+    private $user;
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
     public function index()
     {
-        $user = User::all();
+        $user = $this->user->all();
         return $user;
     }
     public function create()
@@ -19,10 +23,7 @@ class UserRepository implements UserInterface
     }
     public function store($request)
     {
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        $user = new $this->user($request);
         if (!$user->save()) {
             return false;
         }
@@ -30,25 +31,22 @@ class UserRepository implements UserInterface
     }
     public function update($request, $id)
     {
-        $user = $this->show($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        if (!$user->save()) {
+        $user = $this->show($id)->update($request);
+        if (!$user) {
             return false;
         }
         return true;
     }
     public function delete($id)
     {
-        if (User::destroy($id)) {
+        if ($this->user::destroy($id)) {
             return true;
         }
         return false;
     }
     public function show($id)
     {
-        $user = User::query()->find($id);
+        $user = $this->user->query()->find($id);
         return $user;
     }
 }

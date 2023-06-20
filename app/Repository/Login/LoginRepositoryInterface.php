@@ -3,7 +3,7 @@
 namespace App\Repository\Login;
 
 
-interface LoginInterface
+interface LoginRepositoryInterface
 {
     public function login($request);
     public function register($request);

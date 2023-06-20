@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\User;
-use App\Repository\Role\RoleInterface;
-use Illuminate\Support\Facades\Auth;
+use App\Enums\UserRoleEnum;
+use App\Repository\Role\RoleRepositoryInterface;
+use App\service\UserService;
 
 class PostPolicy
 {
@@ -12,9 +12,11 @@ class PostPolicy
      * Determine whether the user can view any models.
      */
     private $role;
-    public function __construct(RoleInterface $role)
+    private $user;
+    public function __construct(UserService $user, RoleRepositoryInterface $role)
     {
         $this->role = $role;
+        $this->user = $user;
     }
 
     /**
@@ -22,7 +24,7 @@ class PostPolicy
      */
     public function view(): bool
     {
-        if ($this->role->isAdmin()) {
+        if ($this->user->isAdmin($this->role->RoleId(), UserRoleEnum::Role())) {
             return true;
         }
         return false;
@@ -33,14 +35,14 @@ class PostPolicy
      */
     public function store(): bool
     {
-        if ($this->role->isAdmin()) {
+        if ($this->user->isAdmin($this->role->RoleId(), UserRoleEnum::Role())) {
             return true;
         }
         return false;
     }
     public function create(): bool
     {
-        if ($this->role->isAdmin()) {
+        if ($this->user->isAdmin($this->role->RoleId(), UserRoleEnum::Role())) {
             return true;
         }
         return false;
@@ -51,7 +53,7 @@ class PostPolicy
      */
     public function update(): bool
     {
-        if ($this->role->isAdmin()) {
+        if ($this->user->isAdmin($this->role->RoleId(), UserRoleEnum::Role())) {
             return true;
         }
         return false;
@@ -62,7 +64,7 @@ class PostPolicy
      */
     public function delete(): bool
     {
-        if ($this->role->isAdmin()) {
+        if ($this->user->isAdmin($this->role->RoleId(), UserRoleEnum::Role())) {
             return true;
         }
         return false;

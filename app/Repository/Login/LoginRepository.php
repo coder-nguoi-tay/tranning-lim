@@ -3,9 +3,8 @@
 namespace App\Repository\Login;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
-class LoginRepository implements LoginInterface
+class LoginRepository implements LoginRepositoryInterface
 {
     public function login($request)
     {
@@ -22,11 +21,7 @@ class LoginRepository implements LoginInterface
     }
     public function register($request)
     {
-        $user = new User([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $user = new User($request);
         if ($user->save()) {
             return true;
         }
