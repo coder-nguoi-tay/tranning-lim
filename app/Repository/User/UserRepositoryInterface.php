@@ -2,7 +2,7 @@
 
 namespace App\Repository\User;
 
-interface UserInterface 
+interface UserRepositoryInterface 
 {
     public function index();
     public function create();

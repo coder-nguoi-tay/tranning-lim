@@ -6,14 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserCollection;
 use App\Models\User;
-use App\Repository\User\UserInterface;
+use App\Repository\User\UserRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     protected $user;
 
-    public function __construct(UserInterface $user)
+    public function __construct(UserRepositoryInterface $user)
     {
         $this->user = $user;
     }
@@ -23,26 +24,10 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $this->authorizeForUser('view', User::class);
+            $this->authorize('view', User::class);
             $user = $this->user->index();
             return new UserCollection($user);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 429]);
-        }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        try {
-            $this->authorizeForUser('create', User::class);
-            return response()->json([
-                'status' => 200,
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 429]);
         }
     }
 
@@ -51,9 +36,14 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        $data = [
+            'email' => $request->email,
+            'name' => $request->name,
+            'password' => Hash::make($request->password),
+        ];
         try {
-            $this->authorizeForUser('store', User::class);
-            if ($this->user->store($request)) {
+            $this->authorize('store', User::class);
+            if ($this->user->store($data)) {
                 return response()->json([
                     'status' => 201,
                 ]);
@@ -62,7 +52,6 @@ class UserController extends Controller
                 'status' => 404
             ]);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 429]);
         }
     }
 
@@ -76,16 +65,8 @@ class UserController extends Controller
             return new UserCollection($user);
         }
         return response()->json([
-            'status' => 422
+            'status' => 404
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -93,9 +74,14 @@ class UserController extends Controller
      */
     public function update(Request $request,  $id)
     {
+        $data = [
+            'email' => $request->email,
+            'name' => $request->name,
+            'password' => Hash::make($request->password),
+        ];
         try {
             $this->authorizeForUser('update', User::class);
-            if ($this->user->update($request, $id)) {
+            if ($this->user->update($data, $id)) {
                 return response()->json([
                     'status' => 200
                 ]);
@@ -104,7 +90,6 @@ class UserController extends Controller
                 'status' => 403
             ]);
         } catch (\Throwable $th) {
-            return response()->json(['message' => $th]);
         }
     }
 
@@ -117,14 +102,13 @@ class UserController extends Controller
             $this->authorizeForUser('delete', User::class);
             if ($this->user->delete($id)) {
                 return response()->json([
-                    'status' => 204
+                    'status' => 200
                 ]);
             };
             return response()->json([
                 'status' => 404
             ]);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 429]);
         }
     }
 }

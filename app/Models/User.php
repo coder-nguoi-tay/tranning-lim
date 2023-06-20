@@ -42,9 +42,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-
-    const CUSTOMER = 1;
-    const ADMIN = 2;
-    const EMPLOY = 3;
 }

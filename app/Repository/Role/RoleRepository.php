@@ -2,19 +2,19 @@
 
 namespace App\Repository\Role;
 
-use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Auth;
 
-class RoleRepository implements RoleInterface
+class RoleRepository implements RoleRepositoryInterface
 {
-    public function RoleId($id)
+    private $userRole;
+    public function __construct(UserRole $userRole)
     {
-        $user = UserRole::query()->where('user_id', $id)->pluck('role')->first();
-        return $user;
+        $this->userRole = $userRole;
     }
-    public function isAdmin()
+    public function RoleId()
     {
-        return $this->RoleId(Auth::guard('api')->user()->id) === User::ADMIN;
+        $user = $this->userRole->query()->where('user_id',Auth::guard('api')->user()->id)->pluck('role')->toArray();
+        return $user;
     }
 }

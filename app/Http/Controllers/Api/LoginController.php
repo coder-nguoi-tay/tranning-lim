@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use App\Models\User;
-use App\Repository\Login\LoginInterface;
-use Illuminate\Http\Request;
+use App\Repository\Login\LoginRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
@@ -18,16 +16,21 @@ class LoginController extends Controller
      * Display a listing of the resource.
      */
     private $login;
-    public function __construct(LoginInterface $login)
+    public function __construct(LoginRepositoryInterface $login)
     {
         $this->login = $login;
     }
     public function register(LoginRequest $request)
     {
-        if ($this->login->login($request)) {
+        $data = [
+            'email' => $request->email,
+            'name' => $request->name,
+            'password' => Hash::make($request->password),
+        ];
+        if ($this->login->register($data)) {
             return response()->json(['status' => 201]);
         }
-        return response()->json(['status' => 404]);
+        return response()->json(['status' => 429]);
     }
     public function login(ServerRequestInterface $request)
     {
