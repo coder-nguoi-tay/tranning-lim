@@ -39,7 +39,7 @@ class UserRepository implements UserRepositoryInterface
     }
     public function delete($id)
     {
-        if ($this->user::destroy($id)) {
+        if ($this->user->destroy($id)) {
             return true;
         }
         return false;
