@@ -8,10 +8,17 @@ class UserService
     public function isAdmin($array = [], $role = [])
     {
         foreach ($array as $value) {
-            if (in_array($value, $role)) {
+            if (array_search($value, $role)) {
                 return true;
             }
         }
         return false;
+    }
+    function generateTrackingNumber()
+    {
+        $prefix = 'DH';
+        $randomPart = substr(uniqid(), -6);
+        $trackingNumber = $prefix . $randomPart;
+        return $trackingNumber;
     }
 }

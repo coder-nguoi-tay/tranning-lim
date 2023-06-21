@@ -14,7 +14,7 @@ class RoleRepository implements RoleRepositoryInterface
     }
     public function RoleId()
     {
-        $user = $this->userRole->query()->where('user_id',Auth::guard('api')->user()->id)->pluck('role')->toArray();
+        $user = $this->userRole->query()->where('user_id', Auth::guard('api')->user()->id)->pluck('role')->toArray();
         return $user;
     }
 }

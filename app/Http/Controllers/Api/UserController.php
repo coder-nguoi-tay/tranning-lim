@@ -28,6 +28,7 @@ class UserController extends Controller
             $user = $this->user->index();
             return new UserCollection($user);
         } catch (\Throwable $th) {
+            return abort(403);
         }
     }
 

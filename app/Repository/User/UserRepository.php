@@ -4,7 +4,6 @@ namespace App\Repository\User;
 
 use App\Repository\User\UserRepositoryInterface;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -39,7 +38,7 @@ class UserRepository implements UserRepositoryInterface
     }
     public function delete($id)
     {
-        if ($this->user::destroy($id)) {
+        if ($this->user->destroy($id)) {
             return true;
         }
         return false;

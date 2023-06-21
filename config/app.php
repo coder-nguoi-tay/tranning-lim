@@ -184,5 +184,20 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
+    'user' => [
+        'view' => [
+            'admin' => 2,
+            'systemadmin' => 3,
+        ],
+        'store' => [
+            'admin' => 2
+        ],
+        'update' => [
+            'admin' => 2
+        ],
+        'delete' => [
+            'admin' => 2
+        ],
+    ]
 
 ];
