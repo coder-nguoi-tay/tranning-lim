@@ -6,34 +6,62 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserCollection;
 use App\Models\User;
-use App\Repository\User\UserRepositoryInterface;
+use App\Repository\User\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @group User
+ *
+ * APIs for managing users
+ */
 class UserController extends Controller
 {
     protected $user;
 
-    public function __construct(UserRepositoryInterface $user)
+    public function __construct(UserRepository $user)
     {
         $this->user = $user;
     }
     /**
-     * Display a listing of the resource.
+     * get thông tin user.
+     *
+     * @response 200 {
+     *   "id": "1111",
+     *   "code_bill": "111",
+     *   "code_order": 11,
+     *   "price": 11,
+     *   "status": 11,
+     *   "user_id": 11,
+     * }
+     * @response 404
      */
+
     public function index()
     {
         try {
             $this->authorize('view', User::class);
-            $user = $this->user->index();
+            $user = $this->user->getData();
             return new UserCollection($user);
         } catch (\Throwable $th) {
-            return abort(403);
+            return response()->json([
+                'errors' => $th->getMessage()
+            ]);
         }
     }
 
     /**
-     * Store a newly created resource in storage.
+     * api thêm user.
+     * 
+     * 
+     * @bodyParam email id required Example: 11
+     * @bodyParam name id required Example: 11
+     * @bodyParam password id required Example: 11
+     *
+     * @response 201 {
+     *   "status": "201",
+     * }
+     * @response 404
      */
     public function store(UserRequest $request)
     {
@@ -53,11 +81,20 @@ class UserController extends Controller
                 'status' => 404
             ]);
         } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage()
+            ]);
         }
     }
-
     /**
-     * Display the specified resource.
+     * show thông tin logshipment.
+     *@urlParam id required Example: 2
+     *
+     * @response 200 {
+     *   "name": "1111",
+     *   "email": "111",
+     * }
+     * @response 404
      */
     public function show(string $id)
     {
@@ -71,7 +108,16 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * api cập nhật user.
+     * 
+     * @bodyParam email id required Example: 11
+     * @bodyParam name id required Example: 11
+     * @bodyParam password id required Example: 11
+     *
+     * @response 200 {
+     *   "status": "200",
+     * }
+     * @response 404
      */
     public function update(Request $request,  $id)
     {
@@ -91,11 +137,20 @@ class UserController extends Controller
                 'status' => 403
             ]);
         } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage()
+            ]);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * xóa thông tin user.
+     *@urlParam id required Example: 2
+     *
+     * @response 204 {
+     *   "status": "204",
+     * }
+     * @response 404
      */
     public function destroy(string $id)
     {
@@ -110,6 +165,9 @@ class UserController extends Controller
                 'status' => 404
             ]);
         } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage()
+            ]);
         }
     }
 }

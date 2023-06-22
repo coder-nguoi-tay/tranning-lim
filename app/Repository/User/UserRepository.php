@@ -2,50 +2,14 @@
 
 namespace App\Repository\User;
 
-use App\Repository\User\UserRepositoryInterface;
 use App\Models\User;
+use App\Repository\BaseRepository;
 
-class UserRepository implements UserRepositoryInterface
+class UserRepository extends BaseRepository
 {
-    private $user;
+    protected $model;
     public function __construct(User $user)
     {
-        $this->user = $user;
-    }
-    public function index()
-    {
-        $user = $this->user->all();
-        return $user;
-    }
-    public function create()
-    {
-    }
-    public function store($request)
-    {
-        $user = new $this->user($request);
-        if (!$user->save()) {
-            return false;
-        }
-        return true;
-    }
-    public function update($request, $id)
-    {
-        $user = $this->show($id)->update($request);
-        if (!$user) {
-            return false;
-        }
-        return true;
-    }
-    public function delete($id)
-    {
-        if ($this->user->destroy($id)) {
-            return true;
-        }
-        return false;
-    }
-    public function show($id)
-    {
-        $user = $this->user->query()->find($id);
-        return $user;
+        $this->model = $user;
     }
 }

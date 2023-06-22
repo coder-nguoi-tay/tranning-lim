@@ -5,32 +5,59 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PackageRequest;
 use App\Http\Resources\PackageCollection;
-use App\Repository\Package\PackageRepositoryInterface;
-use Illuminate\Http\Request;
+use App\Repository\Package\PackageRepository;
 
+/**
+ * @group package
+ *
+ * APIs for managing users
+ */
 class PackageController extends Controller
 {
     private $package;
-    public function __construct(PackageRepositoryInterface $package)
+    public function __construct(PackageRepository $package)
     {
         $this->package = $package;
     }
     /**
-     * Display a listing of the resource.
+     * get thông tin pack.
+     *
+     * @response 200 {
+     *   "id": "1111",
+     *   "name": "111",
+     *   "price": 11,
+     *   "weight": 11,
+     * }
+     * @response 404
      */
     public function index()
     {
-        $data = $this->package->getData();
-        if ($data) {
-            return new PackageCollection($data);
+        try {
+            $data = $this->package->getData();
+            if ($data) {
+                return new PackageCollection($data);
+            }
+            return response()->json([
+                'status' => 404
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage()
+            ]);
         }
-        return response()->json([
-            'status' => 404
-        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * thêm thông tin package.
+     * /**
+     * @bodyParam name id required Example: 11
+     * @bodyParam price id required Example: 11
+     * @bodyParam weight id required Example: 11
+     *
+     * @response 201 {
+     *   "status": "201",
+     * }
+     * @response 404
      */
     public function store(PackageRequest $request)
     {
@@ -39,32 +66,62 @@ class PackageController extends Controller
             'price' => $request->price,
             'weight' => $request->weight,
         ];
-        if ($this->package->store($data)) {
+        try {
+            if ($this->package->store($data)) {
+                return response()->json([
+                    'status' => 201
+                ]);
+            }
             return response()->json([
-                'status' => 201
+                'status' => 404
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage()
             ]);
         }
-        return response()->json([
-            'status' => 429
-        ]);
     }
 
     /**
-     * Display the specified resource.
+     * show thông tin package.
+     *@urlParam id required Example: 2
+     *
+     * @response 200 {
+     *   "shipment_id": "1111",
+     *   "shiper_id": "111",
+     *   "status": 11,
+     *   "post_offices_id": 11,
+     * }
+     * @response 404
      */
     public function show(string $id)
     {
-        $data = $this->package->show($id);
-        if ($data) {
-            return new PackageCollection($data);
+        try {
+            $data = $this->package->show($id);
+            if ($data) {
+                return new PackageCollection($data);
+            }
+            return response()->json([
+                'status' => 404,
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage()
+            ]);
         }
-        return response()->json([
-            'status' => 404,
-        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * cập nhật thông tin package.
+     * /**
+     * @bodyParam name id required Example: 11
+     * @bodyParam price id required Example: 11
+     * @bodyParam weight id required Example: 11
+     *
+     * @response 200 {
+     *   "status": "201",
+     * }
+     * @response 404
      */
     public function update(PackageRequest $request, string $id)
     {
@@ -73,28 +130,46 @@ class PackageController extends Controller
             'price' => $request->price,
             'weight' => $request->weight,
         ];
-        if ($this->package->update($id, $data)) {
+        try {
+            if ($this->package->update($id, $data)) {
+                return response()->json([
+                    'status' => 200
+                ]);
+            }
             return response()->json([
-                'status' => 200
+                'status' => 404
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage()
             ]);
         }
-        return response()->json([
-            'status' => 404
-        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * xóa thông tin package.
+     *@urlParam id required Example: 2
+     *
+     * @response 204 {
+     *   "status": "200",
+     * }
+     * @response 404
      */
     public function destroy(string $id)
     {
-        if ($this->package->delete($id)) {
+        try {
+            if ($this->package->delete($id)) {
+                return response()->json([
+                    'status' => 204
+                ]);
+            }
             return response()->json([
-                'status' => 204
+                'status' => 404
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage()
             ]);
         }
-        return response()->json([
-            'status' => 404
-        ]);
     }
 }

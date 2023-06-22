@@ -1,0 +1,318 @@
+name: User
+description: |-
+
+  APIs for managing users
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/user
+    metadata:
+      groupName: User
+      groupDescription: |-
+
+        APIs for managing users
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'get thông tin user.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "id": "1111",
+            "code_bill": "111",
+            "code_order": 11,
+            "price": 11,
+            "status": 11,
+            "user_id": 11,
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/user
+    metadata:
+      groupName: User
+      groupDescription: |-
+
+        APIs for managing users
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'api thêm user.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: ''
+        required: true
+        example: '11'
+        type: id
+        custom: []
+      name:
+        name: name
+        description: ''
+        required: true
+        example: '11'
+        type: id
+        custom: []
+      password:
+        name: password
+        description: ''
+        required: true
+        example: '11'
+        type: id
+        custom: []
+    cleanBodyParameters:
+      email: '11'
+      name: '11'
+      password: '11'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+            "status": "201",
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/user/{id}'
+    metadata:
+      groupName: User
+      groupDescription: |-
+
+        APIs for managing users
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'show thông tin logshipment.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: ''
+        required: true
+        example: '2'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      id: '2'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "name": "1111",
+            "email": "111",
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/user/{id}'
+    metadata:
+      groupName: User
+      groupDescription: |-
+
+        APIs for managing users
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'api cập nhật user.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the user.'
+        required: true
+        example: voluptas
+        type: string
+        custom: []
+    cleanUrlParameters:
+      id: voluptas
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: ''
+        required: true
+        example: '11'
+        type: id
+        custom: []
+      name:
+        name: name
+        description: ''
+        required: true
+        example: '11'
+        type: id
+        custom: []
+      password:
+        name: password
+        description: ''
+        required: true
+        example: '11'
+        type: id
+        custom: []
+    cleanBodyParameters:
+      email: '11'
+      name: '11'
+      password: '11'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "status": "200",
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/user/{id}'
+    metadata:
+      groupName: User
+      groupDescription: |-
+
+        APIs for managing users
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'xóa thông tin user.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: ''
+        required: true
+        example: '2'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      id: '2'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 204
+        content: |-
+          {
+            "status": "204",
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
