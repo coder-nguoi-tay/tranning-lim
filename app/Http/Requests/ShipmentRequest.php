@@ -23,7 +23,7 @@ class ShipmentRequest extends FormRequest
     {
         return [
             'code_order'=>'required',
-            'shop_id'=>'required',
+            'user_id'=>'required',
             'price'=>'required',
         ];
     }

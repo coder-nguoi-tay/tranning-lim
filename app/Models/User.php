@@ -3,9 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\RoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -42,4 +45,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function roles()
+    {
+        return $this->hasMany(UserRole::class);
+    }
+    public function canAccess($object, $action)
+    {
+        $roles = $this->roles;
+        $allowRoles = config("permission.$object.$action");
+        $allow = false;
+        foreach ($roles->pluck('role')->all() as $role) {
+            if (!$allow && in_array($role, $allowRoles)) {
+                $allow = true;
+                break;
+            }
+        }
+        return $allow;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Repository\Login;
 
 use App\Models\User;
+use Illuminate\Support\Env;
 
 class LoginRepository implements LoginRepositoryInterface
 {
@@ -16,7 +17,6 @@ class LoginRepository implements LoginRepositoryInterface
             'password' => $request->getParsedBody()['password'],
             'scope' => '',
         ]);
-
         return app()->make(\Laravel\Passport\Http\Controllers\AccessTokenController::class)->issueToken($requester);
     }
     public function register($request)

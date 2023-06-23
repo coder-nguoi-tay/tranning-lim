@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PackageRequest extends FormRequest
+class LogShipmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,10 @@ class PackageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255',
-            'price' => 'required|numeric',
-            'weight' => 'required|numeric',
+            'shipment_id' => 'required|numeric',
+            'status' => 'required|numeric',
+            'post_offices_id' => 'required|numeric',
+            'shiper_id' => 'required|numeric',
         ];
     }
 }

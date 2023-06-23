@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\LogShipmentController;
 use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\ShipmentController;
 use App\Http\Controllers\Api\UserController;
@@ -31,25 +32,34 @@ Route::prefix('v1')->group(function () {
         // user
         Route::prefix('user')->group(function () {
             Route::get('/', [UserController::class, 'index']);
-            Route::post('/store', [UserController::class, 'store']);
-            Route::get('/show/{id}', [UserController::class, 'show']);
-            Route::put('/update/{id}', [UserController::class, 'update']);
-            Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
+            Route::post('/', [UserController::class, 'store']);
+            Route::get('/{id}', [UserController::class, 'show']);
+            Route::put('/{user}', [UserController::class, 'update']);
+            Route::delete('/{user}', [UserController::class, 'destroy']);
         });
         // product
         Route::prefix('package')->group(function () {
             Route::get('/', [PackageController::class, 'index']);
-            Route::post('/store', [PackageController::class, 'store']);
-            Route::get('/show/{id}', [PackageController::class, 'show']);
-            Route::put('/update/{id}', [PackageController::class, 'update']);
-            Route::delete('/destroy/{id}', [PackageController::class, 'destroy']);
+            Route::post('/', [PackageController::class, 'store']);
+            Route::get('/{package}', [PackageController::class, 'show']);
+            Route::put('/{package}', [PackageController::class, 'update']);
+            Route::delete('/{package}', [PackageController::class, 'destroy']);
         });
+        // shipment
         Route::prefix('shipment')->group(function () {
             Route::get('/', [ShipmentController::class, 'index']);
-            Route::post('/store', [ShipmentController::class, 'store']);
-            Route::get('/show/{id}', [ShipmentController::class, 'show']);
-            Route::put('/update/{id}', [ShipmentController::class, 'update']);
-            Route::delete('/destroy/{id}', [ShipmentController::class, 'destroy']);
+            Route::post('', [ShipmentController::class, 'store']);
+            Route::get('/{shipment}', [ShipmentController::class, 'show']);
+            Route::put('/{shipment}', [ShipmentController::class, 'update']);
+            Route::delete('/{shipment}', [ShipmentController::class, 'destroy']);
+        });
+        // log shipment
+        Route::prefix('log-shipment')->group(function () {
+            Route::get('/', [LogShipmentController::class, 'index']);
+            Route::post('/', [LogShipmentController::class, 'store']);
+            Route::get('/{LogShipment}', [LogShipmentController::class, 'show']);
+            Route::put('/{LogShipment}', [LogShipmentController::class, 'update']);
+            Route::delete('/{LogShipment}', [LogShipmentController::class, 'destroy']);
         });
     });
 });
