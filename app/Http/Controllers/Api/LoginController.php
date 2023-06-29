@@ -62,7 +62,6 @@ class LoginController extends Controller
      */
     public function login(ServerRequestInterface $request)
     {
-        return 1;
         $validator = FacadesValidator::make($request->getParsedBody(), [
             'email' => 'required|string|email',
             'password' => 'required|string'

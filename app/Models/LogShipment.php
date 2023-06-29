@@ -10,10 +10,9 @@ class LogShipment extends Model
     use HasFactory;
     protected $table = 'log_shipment';
     protected $fillable = [
+        'id',
         'shipment_id',
-        'status',
-        'post_offices_id',
-        'shiper_id',
+        'text',
     ];
     public function shipment()
     {

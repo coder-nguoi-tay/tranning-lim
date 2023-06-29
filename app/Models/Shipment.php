@@ -11,10 +11,12 @@ class Shipment extends Model
     protected $table = 'shipment';
     protected $fillable = [
         'code_bill',
-        'code_order',
-        'shop_id',
-        'user_id',
         'price',
         'status'
     ];
+
+    public function package()
+    {
+        return $this->hasMany(Package::class);
+    }
 }

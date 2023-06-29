@@ -56,10 +56,6 @@ Route::prefix('v1')->group(function () {
         // log shipment
         Route::prefix('log-shipment')->group(function () {
             Route::get('/', [LogShipmentController::class, 'index']);
-            Route::post('/', [LogShipmentController::class, 'store']);
-            Route::get('/{LogShipment}', [LogShipmentController::class, 'show']);
-            Route::put('/{LogShipment}', [LogShipmentController::class, 'update']);
-            Route::delete('/{LogShipment}', [LogShipmentController::class, 'destroy']);
         });
     });
 });

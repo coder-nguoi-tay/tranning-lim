@@ -22,8 +22,6 @@ class ShipmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code_order'=>'required',
-            'user_id'=>'required',
             'price'=>'required',
         ];
     }

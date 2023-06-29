@@ -127,7 +127,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ];
         try {
-            $this->authorizeForUser('update', User::class);
+            $this->authorize('update', User::class);
             if ($this->user->update($data, $id)) {
                 return response()->json([
                     'status' => 200
@@ -155,10 +155,10 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         try {
-            $this->authorizeForUser('delete', User::class);
+            $this->authorize('delete', User::class);
             if ($this->user->delete($id)) {
                 return response()->json([
-                    'status' => 200
+                    'status' => 204
                 ]);
             };
             return response()->json([

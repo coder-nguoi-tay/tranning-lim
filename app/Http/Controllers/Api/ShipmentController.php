@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\StatusShipment;
+use App\Events\Shipment\LogShipmentEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShipmentRequest;
 use App\Http\Resources\ShipmentCollection;
+use App\Models\Shipment;
 use App\Repository\Shipment\ShipmentRepository;
 use App\service\UserService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -32,10 +36,8 @@ class ShipmentController extends Controller
      * @response 200 {
      *   "id": "1111",
      *   "code_bill": "111",
-     *   "code_order": 11,
      *   "price": 11,
      *   "status": 11,
-     *   "user_id": 11,
      * }
      * @response 404
      */
@@ -53,10 +55,8 @@ class ShipmentController extends Controller
     /**
      * thêm thông tin shipment.
      * /**
-     * @bodyParam code_order id required Example: 11
      * @bodyParam price id required Example: 11
      * @bodyParam status id required Example: 11
-     * @bodyParam user_id id required Example: 11
      *
      * @response 201 {
      *   "status": "201",
@@ -68,11 +68,8 @@ class ShipmentController extends Controller
         try {
             $data = [
                 'code_bill' => $this->userService->generateTrackingNumber(),
-                'code_order' => $request->code_order,
-                'shop_id' => Auth::guard('api')->user()->id,
                 'price' => $request->price,
-                'status' => $request->status,
-                'user_id' => $request->user,
+                'status' => $request->status ?? 0,
             ];
             if ($this->shipment->store($data)) {
                 return response()->json([
@@ -96,10 +93,8 @@ class ShipmentController extends Controller
      * @response 200 {
      *   "id": "1111",
      *   "code_bill": "111",
-     *   "code_order": 11,
-     *   "shop_id": 11,
      *   "price": 11,
-     *   "user_id": 11,
+     *   "status": 11,
      * }
      * @response 404
      */
@@ -118,33 +113,23 @@ class ShipmentController extends Controller
     /**
      * cập nhật thông tin shipment.
      * /**
-     * @bodyParam code_order id required Example: 11
      * @bodyParam price id required Example: 11
      * @bodyParam status id required Example: 11
-     * @bodyParam user_id id required Example: 11
      *
      * @response 200 {
      *   "status": "200",
      * }
      * @response 404
      */
-    public function update(ShipmentRequest $request, string $id)
+    public function update(Request $request, string $id) //ShipmentRequest
     {
         $data = [
-            'code_order' => $request->code_order,
-            'user_id' => $request->user_id,
             'price' => $request->price,
             'status' => $request->status,
         ];
         try {
-            if ($this->shipment->update($data, $id)) {
-                return response()->json([
-                    'status' => 200
-                ]);
-            }
-            return response()->json([
-                'status' => 404
-            ]);
+            $ship = $this->shipment->update($data, $id);
+            return new ShipmentCollection($ship);
         } catch (\Throwable $th) {
             return response()->json([
                 'errors' => $th->getMessage()

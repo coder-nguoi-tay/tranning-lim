@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PackageRequest;
 use App\Http\Resources\PackageCollection;
 use App\Repository\Package\PackageRepository;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @group package
@@ -27,6 +28,9 @@ class PackageController extends Controller
      *   "name": "111",
      *   "price": 11,
      *   "weight": 11,
+     *   "user_id": 11,
+     *   "shop_id": 11,
+     *   "order_id": 11,
      * }
      * @response 404
      */
@@ -53,6 +57,9 @@ class PackageController extends Controller
      * @bodyParam name id required Example: 11
      * @bodyParam price id required Example: 11
      * @bodyParam weight id required Example: 11
+     * @bodyParam user_id id required Example: 11
+     * @bodyParam shop_id id required Example: 11
+     * @bodyParam order_id id required Example: 11
      *
      * @response 201 {
      *   "status": "201",
@@ -65,6 +72,9 @@ class PackageController extends Controller
             'name' => $request->name,
             'price' => $request->price,
             'weight' => $request->weight,
+            'user_id' => $request->user_id,
+            'shop_id' => Auth::guard('api')->user()->id,
+            'order_id' => $request->order_id,
         ];
         try {
             if ($this->package->store($data)) {
@@ -87,10 +97,13 @@ class PackageController extends Controller
      *@urlParam id required Example: 2
      *
      * @response 200 {
-     *   "shipment_id": "1111",
-     *   "shiper_id": "111",
-     *   "status": 11,
-     *   "post_offices_id": 11,
+     *    "id": "1111",
+     *   "name": "111",
+     *   "price": 11,
+     *   "weight": 11,
+     *   "user_id": 11,
+     *   "shop_id": 11,
+     *   "order_id": 11,
      * }
      * @response 404
      */
@@ -117,6 +130,9 @@ class PackageController extends Controller
      * @bodyParam name id required Example: 11
      * @bodyParam price id required Example: 11
      * @bodyParam weight id required Example: 11
+     * @bodyParam user_id id required Example: 11
+     * @bodyParam shop_id id required Example: 11
+     * @bodyParam order_id id required Example: 11
      *
      * @response 200 {
      *   "status": "201",
@@ -129,6 +145,9 @@ class PackageController extends Controller
             'name' => $request->name,
             'price' => $request->price,
             'weight' => $request->weight,
+            'user_id' => $request->user_id,
+            'shop_id' => Auth::guard('api')->user()->id,
+            'order_id' => $request->order_id,
         ];
         try {
             if ($this->package->update($id, $data)) {

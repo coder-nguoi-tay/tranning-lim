@@ -12,6 +12,14 @@ class Package extends Model
     protected $fillable = [
         'name',
         'price',
-        'weight'
+        'weight',
+        'shipment_id',
+        'user_id',
+        'shop_id',
+        'order_id',
     ];
+    public function shipment()
+    {
+        return $this->hasOne(Shipment::class);
+    }
 }

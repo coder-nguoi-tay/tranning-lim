@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('price');
+            $table->string('id_shipment');
             $table->string('weight');
             $table->timestamps();
         });

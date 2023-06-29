@@ -14,6 +14,7 @@ class BaseRepository
     public function store($request)
     {
         $base = new $this->model($request);
+        $base->save();
         if (!$base->save()) {
             return false;
         }
@@ -25,11 +26,11 @@ class BaseRepository
     }
     public function update($request, $id)
     {
-        $base = $this->show($id)->update($request);
-        if (!$base) {
-            return false;
+        $base = $this->show($id)->fill($request);
+        if ($base->save()) {
+            return $base;
         }
-        return true;
+        return false;
     }
     public function delete($id)
     {
