@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\StatusShipment;
-use App\Events\Shipment\LogShipmentEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShipmentRequest;
 use App\Http\Resources\ShipmentCollection;
-use App\Models\Shipment;
 use App\Repository\Shipment\ShipmentRepository;
 use App\service\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @group shipment
@@ -100,13 +96,16 @@ class ShipmentController extends Controller
      */
     public function show(string $id)
     {
-        $data = $this->shipment->show($id);
-        if ($data) {
-            return new ShipmentCollection($data);
+        try {
+            $data = $this->shipment->show($id);
+            if ($data) {
+                return new ShipmentCollection($data);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage()
+            ]);
         }
-        return response()->json([
-            'status' => 404
-        ]);
     }
 
 

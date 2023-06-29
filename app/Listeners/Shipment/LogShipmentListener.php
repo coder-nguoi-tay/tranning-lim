@@ -29,8 +29,7 @@ class LogShipmentListener
             $differentElements['updated_at'] = Carbon::parse($differentElements['updated_at'])->format('Y/m/d H:i:s');
             $data = [
                 'shipment_id' => $dataLocal['id'],
-                'text' =>
-                "update shipment status " . $dataLocal['status'] . ' -> ' . $differentElements['status'] . " update time " . $differentElements['updated_at']
+                'text' => "update shipment status " . $dataLocal['status'] . ' -> ' . $differentElements['status']
             ];
             $this->LogShipment->store($data);
         }

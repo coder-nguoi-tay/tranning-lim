@@ -5,7 +5,7 @@ namespace App\service;
 
 class UserService
 {
-    function generateTrackingNumber()
+    public function generateTrackingNumber()
     {
         $prefix = 'DH';
         $randomPart = substr(uniqid(), -6);
