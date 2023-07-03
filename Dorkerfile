@@ -1,0 +1,52 @@
+# Sử dụng ảnh cơ sở PHP 8.1
+FROM php:8.1-fpm
+
+# Cài đặt các gói phụ thuộc cần thiết
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip
+
+# Cài đặt Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Đặt thư mục làm việc
+WORKDIR /var/www
+
+# Sao chép tệp composer.json và composer.lock vào container
+COPY composer.json composer.lock ./
+
+# Cài đặt các gói phụ thuộc PHP thông qua Composer
+RUN composer install --no-scripts --no-autoloader
+
+# Sao chép toàn bộ mã nguồn Laravel vào container
+COPY . .
+
+# Tạo thư mục lưu trữ tệp phiên phiên bản
+RUN mkdir -p storage/framework/{sessions,views,cache,testing}
+
+# Đặt quyền cho thư mục storage và bootstrap
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+# Tạo mã tải động cho Laravel
+RUN composer dump-autoload
+
+# Tạo khóa ứng dụng Laravel
+RUN php artisan key:generate
+
+# Chạy các lệnh khác cần thiết cho ứng dụng Laravel
+RUN php artisan migrate --force
+
+# Cài đặt và cấu hình Nginx (ví dụ)
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose cổng ứng dụng (ví dụ: 80)
+EXPOSE 80
+
+# Chạy Nginx và PHP-FPM
+# CMD ["nginx", "-g", "daemon off;"]
+CMD ["php-fpm"]
